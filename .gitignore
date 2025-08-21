@@ -11,8 +11,11 @@ __pycache__/
 # For now, let's ignore the data directory to avoid pushing a large db file.
 /data/
 /models/
+/suggested_transfers/**
 
 # VS Code
 .vscode/
 
 .update_secrets.py
+
+.curl_input.txt

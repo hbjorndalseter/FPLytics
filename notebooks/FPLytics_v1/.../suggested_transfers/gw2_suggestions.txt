@@ -1,0 +1,32 @@
+========================================
+--- Points Gain Summary ---
+========================================
+Predicted score for CURRENT team: 41.80
+Predicted score for NEW team (after hits): 45.57
+Predicted points GAIN from transfers: +3.76
+========================================
+
+--- Optimal Transfer Suggestions ---
+  🔴 SELL: B.Fernandes
+  🔴 SELL: Marc Guiu
+  🟢 BUY:  Wood
+  🟢 BUY:  O'Riley
+
+--- Optimal Team for Next Gameweek ---
+                web_name    position  now_cost  xP_adjusted   Status
+player_id                                                           
+64               Watkins     Forward       9.0     4.267675     VICE
+508           N.Williams    Defender       5.0     1.125454      Sub
+382                Wirtz  Midfielder       8.5     1.444701      Sub
+235               Palmer  Midfielder      10.5     1.386279      Sub
+470             Dúbravka  Goalkeeper       4.0     3.320834      Sub
+381              M.Salah  Midfielder      14.5     7.081119  STARTER
+603                Diouf    Defender       4.5     1.672298  STARTER
+575           Van de Ven    Defender       4.5     3.537326  STARTER
+220              Sánchez  Goalkeeper       5.0     3.631196  STARTER
+164              O'Riley  Midfielder       5.5     4.181562  STARTER
+242        Dewsbury-Hall  Midfielder       5.0     1.493060  STARTER
+249           João Pedro     Forward       7.5     3.025540  STARTER
+261             Richards    Defender       4.5     2.055654  STARTER
+191               Estève    Defender       4.0     1.909096  STARTER
+525                 Wood     Forward       7.6    16.713474  CAPTAIN
