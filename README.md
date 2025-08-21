@@ -1,6 +1,6 @@
-## FPL AI Manager 🤖⚽
+# FPL AI Manager 🤖⚽
 
-# Overview
+## Overview
 
 FPL AI Manager is a comprehensive toolkit for Fantasy Premier League (FPL) managers who want to leverage data science to optimize their decision-making. This project uses a machine learning model to predict player performance (Expected Points - xP) and an optimization algorithm to suggest the best possible transfers, captaincy choices, and starting lineups.
 
