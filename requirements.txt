@@ -1,0 +1,8 @@
+# requirements.txt
+
+pandas
+requests
+sqlalchemy
+scikit-learn
+xgboost
+pulp
