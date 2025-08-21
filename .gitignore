@@ -17,5 +17,6 @@ __pycache__/
 .vscode/
 
 .update_secrets.py
-
 .curl_input.txt
+.ipynb_checkpoints
+
