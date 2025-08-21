@@ -15,5 +15,4 @@ __pycache__/
 # VS Code
 .vscode/
 
-# Stuff :D
 .update_secrets.py
