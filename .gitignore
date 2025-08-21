@@ -16,3 +16,5 @@ __pycache__/
 .vscode/
 
 .update_secrets.py
+
+.ipynb_checkpoints
