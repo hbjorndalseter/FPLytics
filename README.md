@@ -18,7 +18,9 @@ Language: Python 3.10
 
 Data Manipulation: pandas, numpy
 
-Data Acquisition: requests
+## Data Source & Acknowledgements
+
+This project would not be possible without the comprehensive dataset provided by the [FPL-Elo-Insights](https://github.com/olbauday/FPL-Elo-Insights) repository. It provides a meticulously curated combination of official FPL API data, detailed match statistics, and historical team Elo ratings, which forms the backbone of the predictive model.
 
 Machine Learning: scikit-learn, xgboost
 
