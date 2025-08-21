@@ -1,5 +1,7 @@
-FPL AI Manager 🤖⚽
-Overview
+## FPL AI Manager 🤖⚽
+
+# Overview
+
 FPL AI Manager is a comprehensive toolkit for Fantasy Premier League (FPL) managers who want to leverage data science to optimize their decision-making. This project uses a machine learning model to predict player performance (Expected Points - xP) and an optimization algorithm to suggest the best possible transfers, captaincy choices, and starting lineups.
 
 The entire pipeline is containerized with Docker for easy and reproducible execution.
@@ -14,7 +16,7 @@ Squad Optimization: Implements a Mixed-Integer Linear Programming (MILP) solver 
 Reproducible Environment: The entire project is containerized with Docker, ensuring the environment is consistent and easy to set up.
 
 Technology Stack
-Language: Python 3.10
+Language: Python 3.13
 
 Data Manipulation: pandas, numpy
 
@@ -30,7 +32,8 @@ Database: SQLite
 
 Environment: Docker
 
-Setup & Installation
+## Setup & Installation (Currently not working)
+
 Prerequisites
 Docker installed on your machine.
 
