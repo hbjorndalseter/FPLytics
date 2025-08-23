@@ -1,87 +1,126 @@
-# FPL AI Manager 🤖⚽
+# FPL AI Manager
+
+A toolkit for Fantasy Premier League (FPL) managers who want to leverage data science to optimize decision‑making. It uses an XGBoost model to predict player performance (expected points, xP) and a mixed‑integer linear programming optimizer to suggest transfers, captaincy, and starting lineups. The workflow is a clean, repeatable pipeline controlled by a single CLI entry point.
 
 ## Overview
 
-FPL AI Manager is a comprehensive toolkit for Fantasy Premier League (FPL) managers who want to leverage data science to optimize their decision-making. This project uses a machine learning model to predict player performance (Expected Points - xP) and an optimization algorithm to suggest the best possible transfers, captaincy choices, and starting lineups.
+- Script‑based pipeline from data prep to transfer suggestions
+- Advanced predictive model with a custom “blended form” feature for early‑season accuracy
+- Intelligent squad optimization (MILP) that respects FPL rules
+- User‑customizable constraints (keep/sell/consider specific players)
+- Secure credential management via `.env`
 
-The entire pipeline is containerized with Docker for easy and reproducible execution.
+## Technology stack
 
-Core Features
-Automated Data Pipeline: Fetches the latest player stats, fixture details, and performance data from the official FPL API and other sources.
+- Language: Python 3.10+
+- Core libraries: pandas, scikit‑learn, xgboost, pulp, python‑dotenv
+- Environment: Virtual environment (venv)
 
-Predictive Modeling: Uses an XGBoost model trained on historical data to forecast player points for future gameweeks.
+## Data source & acknowledgements
 
-Squad Optimization: Implements a Mixed-Integer Linear Programming (MILP) solver to recommend the optimal weekly transfers and team structure, considering budget, transfer costs, and formation constraints.
+This project is inspired by and benefits from the comprehensive dataset provided by the FPL‑Elo‑Insights ecosystem, which combines official FPL API data, detailed match statistics, and historical team Elo ratings.
 
-Reproducible Environment: The entire project is containerized with Docker, ensuring the environment is consistent and easy to set up.
+## Setup & installation
 
-Technology Stack
-Language: Python 3.13
+### 1) Clone the repository
 
-Data Manipulation: pandas, numpy
+```bash
+git clone https://github.com/your-username/FPLytics.git
+cd FPLytics
+```
 
-## Data Source & Acknowledgements
+### 2) Set up a virtual environment
 
-This project would not be possible without the comprehensive dataset provided by the [FPL-Elo-Insights](https://github.com/olbauday/FPL-Elo-Insights) repository. It provides a meticulously curated combination of official FPL API data, detailed match statistics, and historical team Elo ratings, which forms the backbone of the predictive model.
+It’s recommended to use a virtual environment to manage dependencies.
 
-Machine Learning: scikit-learn, xgboost
+```bash
+# Create the virtual environment
+python -m venv .venv
 
-Optimization: PuLP
+# Activate it (macOS/Linux)
+source .venv/bin/activate
 
-Database: SQLite
+# On Windows
+# .venv\Scripts\activate
+```
 
-Environment: Docker
+### 3) Install dependencies
 
-## Setup & Installation (Currently not working)
+```bash
+pip install -r requirements.txt
+```
 
-Prerequisites
-Docker installed on your machine.
+### 4) Set up your FPL credentials
 
-A code editor like VS Code.
+Your FPL login credentials (cookie and tokens) are needed to fetch your team data. A helper script parses a copied cURL command and writes a `.env` file.
 
-A Git client.
+1. Log in at https://fantasy.premierleague.com.
+2. Open DevTools → Network tab.
+3. Find a request like `my-team/{YOUR_ID}` → right‑click → Copy → Copy as cURL (bash).
+4. In the project root, create `curl_input.txt` and paste the entire cURL command.
+5. Run the secrets updater:
 
-Installation Steps
-Clone the repository:
+```bash
+python update_secrets.py
+```
 
-git clone https://github.com/your-username/fpl-ai-manager.git
-cd fpl-ai-manager
+This parses `curl_input.txt` and creates a `.env` with your secrets. Repeat when your FPL session expires.
 
-Build the Docker Image:
-This command builds a Docker image named fpl-pipeline based on the Dockerfile. It will install all the necessary Python libraries and set up the environment. This only needs to be run once, or whenever you update requirements.txt.
+Note: If `update_secrets.py` is not present in this repo, add it or adjust to your local secrets workflow.
 
-docker build -t fpl-pipeline .
+## Project workflow
 
-Initialize the Database:
-The first time you run the project, you'll need to fetch historical data to create and populate your SQLite database.
+All commands are run via `main.py`.
 
-docker run --rm -v $(pwd)/data:/app/data fpl-pipeline python main.py --setup
+### One‑time setup: build data and train model
 
-Note: The -v $(pwd)/data:/app/data command mounts the local ./data directory into the container. This ensures that your SQLite database (fpl_data.db) is saved on your machine, not just inside the temporary container.
+```bash
+python main.py --build-data --train
+```
 
-Weekly Workflow
-Here is the recommended operational loop for using the tool each gameweek.
+Outputs:
 
-1. Fetch Latest Gameweek Data
-   After the final match of a gameweek has concluded, run this command to pull the latest results, price changes, and stats.
+- `data/master_training_data.csv`
+- `models/fpl_model_v1.joblib`
 
-docker run --rm -v $(pwd)/data:/app/data fpl-pipeline python main.py --fetch-data
+### Weekly workflow
 
-2. Generate New Predictions
-   With the latest data ingested, you can now generate fresh Expected Points (xP) predictions for the upcoming gameweeks.
+1. Update secrets if needed (session expired):
 
-docker run --rm -v $(pwd)/data:/app/data fpl-pipeline python main.py --predict
+```bash
+python update_secrets.py
+```
 
-3. Get Transfer Suggestions
-   This is the final step. Run the optimizer to get concrete advice for your team. You will need to provide your FPL Team ID.
+2. Get suggestions (predict + optimize):
 
-docker run --rm -v $(pwd)/data:/app/data fpl-pipeline python main.py --suggest-transfers --team-id YOUR_TEAM_ID
+```bash
+python main.py --predict --suggest
+```
 
-The script will output the recommended transfers, captain, and vice-captain to your terminal.
+This will:
 
-(Optional) Model Retraining
-It is recommended to retrain the model periodically (e.g., every 4-6 gameweeks or during an international break) to incorporate the latest season's trends.
+- Generate player predictions and save to `data/`
+- Fetch your current team
+- Run the optimizer
+- Save final suggestions to `suggested_transfers/`
 
-docker run --rm -v $(pwd)/data:/app/data -v $(pwd)/models:/app/models fpl-pipeline python main.py --train-model
+## Repository structure
 
-Note: This command also mounts a ./models directory to ensure your newly trained model file is saved locally.
+- `main.py` — CLI entry for the pipeline
+- `data/` — datasets and generated predictions
+- `models/` — serialized models (e.g., joblib)
+- `scripts/` — pipeline scripts (build, train, predict, suggest)
+- `notebooks/` — exploration and model development
+- `suggested_transfers/` — saved recommendation outputs
+- `requirements.txt` — Python dependencies
+- `Dockerfile` — containerized environment
+
+## Troubleshooting
+
+- Authentication errors: re‑run `python update_secrets.py` to refresh cookies/tokens
+- Missing dependencies: ensure the virtual environment is active and re‑install `requirements.txt`
+- Paths: run commands from the project root so relative paths resolve correctly
+
+## License
+
+This project is for educational and personal use. Review and adapt before production use.
